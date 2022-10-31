@@ -15,8 +15,9 @@ import { setFilter } from './components/redux/filterSlice';
 import { getFilter } from './components/redux/selectors';
 export default function App() {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
-  console.log(contacts.contacts)
+  const {contacts} = useSelector(getContacts);
+  
+  console.log(contacts)
   
   const filter = useSelector(getFilter);
   
@@ -26,7 +27,7 @@ export default function App() {
 
 
   const formSubmitHandler = (name, number) => {
-    const isExist = contacts.contacts.some(contact => {
+    const isExist = contacts.some(contact => {
       return contact.name === name
     })
     if (!isExist) { 
@@ -42,7 +43,7 @@ export default function App() {
    
     const normalizedFilter = filter.toLowerCase();
 
-   return contacts.contacts.filter(contact =>
+   return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter),
     );
   };
