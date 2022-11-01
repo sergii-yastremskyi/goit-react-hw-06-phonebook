@@ -2,12 +2,28 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import css from './form.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from '../redux/selectors';
+import { addContact } from '../redux/contactsSlice';
 
 
 
-export default function Form({onSubmit}) {
+
+export default function Form() {
+  const dispatch = useDispatch();
+   const {contacts} = useSelector(getContacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const formSubmitHandler = (name, number) => {
+  
+    const isExist = contacts.some(contact => {
+      return contact.name === name
+    })
+    if (!isExist) { 
+      dispatch(addContact(name, number));
+    } else {alert(`${name} already in contacts`);
+    }};
   const handleChange = e => { 
     const { name,value } = e.currentTarget;
     switch (name) { 
@@ -24,7 +40,7 @@ export default function Form({onSubmit}) {
    const handleSubmit = e => {
     e.preventDefault();
 
-    onSubmit(name,number);
+    formSubmitHandler(name,number);
     reset();
   };
   const reset = () => {
